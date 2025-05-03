@@ -1,0 +1,15 @@
+supergraph:
+  listen: 0.0.0.0:8080
+include_subgraph_errors:
+  all: true
+cors:
+  allow_any_origin: true
+connectors:
+  sources:
+    github.github:
+      $config:
+        token: ${env.GITHUB_API_TOKEN}
+telemetry:
+  instrumentation:
+    spans:
+      mode: spec_compliant

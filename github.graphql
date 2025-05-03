@@ -17,6 +17,39 @@ extend schema
   )
 
 type Query {
+  "All teams in the DaleStudy organization"
+  teams: [Team]!
+    @connect(
+      source: "github"
+      # https://docs.github.com/en/rest/teams/teams#list-teams
+      http: { GET: "/orgs/DaleStudy/teams" }
+      selection: """
+      id
+      name
+      description
+      members {
+        login
+        id
+
+      }
+      """
+    )
+
+  "All members of a team in the DaleStudy organization"
+  members(teamName: String!): [Member]!
+    @connect(
+      source: "github"
+      # https://docs.github.com/en/rest/teams/members#list-team-members
+      http: {
+        GET: "/orgs/DaleStudy/teams/{$args.teamName}/members?per_page=100"
+      }
+      selection: """
+      login
+      id
+      avatarUrl: avatar_url
+      """
+    )
+
   "All trees in the leetcode-study repository"
   gitTrees: [GitTree]!
     @connect(
@@ -34,7 +67,38 @@ type Query {
     )
 }
 
-"A file or directory in the Git repository"
+"A team"
+type Team {
+  "The unique identifier"
+  id: ID!
+  "The name"
+  name: String!
+  "The description"
+  description: String
+  "The members"
+  members: [Member]!
+    @connect(
+      source: "github"
+      http: { GET: "/orgs/DaleStudy/teams/{$this.name}/members?per_page=100" }
+      selection: """
+      login
+      id
+      avatarUrl: avatar_url
+      """
+    )
+}
+
+"A member"
+type Member {
+  "The unique identifier"
+  id: ID!
+  "The login name"
+  login: String!
+  "The avatar URL"
+  avatarUrl: String!
+}
+
+"A Git tree"
 type GitTree {
   "The type of the node"
   type: String!
