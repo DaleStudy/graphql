@@ -1,0 +1,19 @@
+name: Apollo Publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: apollo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: apollographql-gh-actions/install-rover@v1
+      - uses: apollographql-gh-actions/rover-subgraph-publish@v1
+        with:
+          apollo-key: ${{ secrets.APOLLO_KEY }}
+          graph-ref: ${{ secrets.APOLLO_GRAPH_REF }}
+          name: github
+          schema: ./github.graphql
+          no-url: true
