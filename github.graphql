@@ -1,0 +1,43 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.10", import: ["@key"])
+  @link(
+    url: "https://specs.apollo.dev/connect/v0.1"
+    import: ["@connect", "@source"]
+  )
+  @source(
+    name: "github"
+    http: {
+      baseURL: "https://api.github.com"
+      headers: [
+        { name: "Accept", value: "application/vnd.github+json" }
+        { name: "User-Agent", value: "{$config.agent}" }
+        { name: "Authorization", value: "token {$config.token}" }
+      ]
+    }
+  )
+
+type Query {
+  "All trees in the leetcode-study repository"
+  gitTrees: [GitTree]!
+    @connect(
+      source: "github"
+      # https://docs.github.com/en/rest/git/trees#get-a-tree
+      http: {
+        GET: "/repos/DaleStudy/leetcode-study/git/trees/main?recursive=1"
+      }
+      selection: """
+      $.tree {
+        type
+        path
+      }
+      """
+    )
+}
+
+"A file or directory in the Git repository"
+type GitTree {
+  "The type of the node"
+  type: String!
+  "The path of the node"
+  path: String!
+}
