@@ -1,6 +1,6 @@
+federation_version: =2.10.0
 subgraphs:
-  products:
+  github:
     routing_url: http://ignore
     schema:
-      file: products.graphql
-federation_version: =2.10.0
+      file: github.graphql
