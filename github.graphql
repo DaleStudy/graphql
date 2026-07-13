@@ -27,11 +27,6 @@ type Query {
       id
       name
       description
-      members {
-        login
-        id
-
-      }
       """
     )
 
