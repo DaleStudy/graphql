@@ -1,0 +1,9 @@
+{
+  "name": "dalestudy-graphql",
+  "private": true,
+  "devDependencies": {
+    "@cloudflare/containers": "latest",
+    "@cloudflare/workers-types": "latest",
+    "wrangler": "latest"
+  }
+}

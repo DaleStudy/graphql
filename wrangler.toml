@@ -1,0 +1,18 @@
+name = "graphql"
+account_id = "86aa227176a624680f7d34e691472576"
+main = "src/index.ts"
+compatibility_date = "2026-03-01"
+
+[[containers]]
+class_name = "RouterContainer"
+image = "./Dockerfile"
+instance_type = "basic"
+max_instances = 1
+
+[[durable_objects.bindings]]
+name = "ROUTER"
+class_name = "RouterContainer"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RouterContainer"]
