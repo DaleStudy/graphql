@@ -32,7 +32,7 @@ $ APOLLO_GRAPH_REF=dalestudy@current \
 ```sh
 $ curl --request POST \
   --header 'content-type: application/json' \
-  --url 'https://dalestudy.fly.dev/' \
+  --url 'https://graphql.daleseo.workers.dev/' \
   --data '{"query":"query { __typename }"}'
 {"data":{"__typename":"Query"}}%
 ```

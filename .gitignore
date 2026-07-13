@@ -1,2 +1,10 @@
+# Dependencies
+node_modules/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Environment
 .env
 mise.local.toml

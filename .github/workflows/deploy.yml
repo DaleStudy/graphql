@@ -1,0 +1,26 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: cloudflare
+    concurrency: deploy-group
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          secrets: |
+            APOLLO_GRAPH_REF
+            APOLLO_KEY
+            GITHUB_API_TOKEN
+        env:
+          APOLLO_GRAPH_REF: ${{ secrets.APOLLO_GRAPH_REF }}
+          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+          GITHUB_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
