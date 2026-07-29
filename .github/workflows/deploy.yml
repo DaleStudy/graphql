@@ -13,6 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Check types
+        run: bun run check
+      - name: Run tests
+        run: bun test
       - uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -24,3 +30,28 @@ jobs:
           APOLLO_GRAPH_REF: ${{ secrets.APOLLO_GRAPH_REF }}
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
           GITHUB_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
+      - name: Smoke test deployed GraphQL endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          response_file="$(mktemp)"
+          trap 'rm -f "$response_file"' EXIT
+
+          curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --retry 2 \
+            --retry-all-errors \
+            --retry-delay 5 \
+            --connect-timeout 5 \
+            --max-time 45 \
+            --header "Content-Type: application/json" \
+            --data '{"query":"query SmokeTest { __typename }"}' \
+            --output "$response_file" \
+            "https://graphql.daleseo.workers.dev/"
+
+          jq --exit-status \
+            '.data.__typename == "Query" and (.errors == null)' \
+            "$response_file"

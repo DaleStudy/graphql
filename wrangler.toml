@@ -7,7 +7,7 @@ compatibility_date = "2026-03-01"
 class_name = "RouterContainer"
 image = "./Dockerfile"
 instance_type = "basic"
-max_instances = 1
+max_instances = 3
 
 [[durable_objects.bindings]]
 name = "ROUTER"
@@ -16,3 +16,21 @@ class_name = "RouterContainer"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["RouterContainer"]
+
+[triggers]
+crons = ["*/10 * * * *"]
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true

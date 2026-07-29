@@ -1,9 +1,15 @@
 {
   "name": "dalestudy-graphql",
   "private": true,
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "bun test"
+  },
   "devDependencies": {
-    "@cloudflare/containers": "latest",
-    "@cloudflare/workers-types": "latest",
-    "wrangler": "latest"
+    "@cloudflare/containers": "0.3.7",
+    "@cloudflare/workers-types": "5.20260713.1",
+    "@types/bun": "1.3.14",
+    "typescript": "7.0.2",
+    "wrangler": "4.110.0"
   }
 }
