@@ -13,13 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
-      - name: Write secrets file
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          secrets: |
+            APOLLO_GRAPH_REF
+            APOLLO_KEY
+            GITHUB_API_TOKEN
         env:
           APOLLO_GRAPH_REF: ${{ secrets.APOLLO_GRAPH_REF }}
           APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
           GITHUB_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
-        run: jq -n 'env | {APOLLO_GRAPH_REF, APOLLO_KEY, GITHUB_API_TOKEN}' > "$RUNNER_TEMP/secrets.json"
-      - uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: deploy --secrets-file ${{ runner.temp }}/secrets.json
